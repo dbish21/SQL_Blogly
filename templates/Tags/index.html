@@ -1,0 +1,29 @@
+{# Extend base template for consistent site layout #}
+{% extends 'base.html' %}
+
+{# Simple, descriptive page title #}
+{% block title %}Tags{% endblock %}
+
+{% block content %}
+
+{# Main heading matches page title for clarity #}
+<h1>Tags</h1>
+
+{# Simple unordered list for tag display #}
+{# Using semantic HTML for better accessibility and SEO #}
+<ul>
+  {% for tag in tags %}
+  <li>
+    {# Each tag links to its detail view #}
+    {# Using tag.id in URL for proper routing #}
+    <a href="/tags/{{ tag.id }}">{{ tag.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+{# Action button for creating new tags #}
+{# Wrapped in <p> for proper spacing #}
+{# Using Bootstrap primary button style to indicate main action #}
+<p><a class="btn btn-primary" href="/tags/new">Add Tag</a></p>
+
+{% endblock %}

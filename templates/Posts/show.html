@@ -1,0 +1,61 @@
+{# Extend base template for consistent site layout #}
+{% extends 'base.html' %}
+
+{# Dynamic page title using post title #}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+
+{# Main heading matches post title #}
+<h1>{{ post.title }}</h1>
+
+{# Post content displayed as-is #}
+<p>{{ post.content }}</p>
+
+{# Post metadata with author and date #}
+{# Using italics for secondary information #}
+<p><i>By {{ post.user.full_name }}
+  on {{ post.friendly_date }}
+</i></p>
+
+{# Tags section - only shown if post has tags #}
+{% if post.tags %}
+<p>
+  <b>Tags:</b>
+  {# Loop through tags, displaying each as a clickable badge #}
+  {% for tag in post.tags %}
+  <a href="/tags/{{ tag.id }}">
+    {# Using Bootstrap badge styling for tag visual #}
+    <i class="badge badge-primary">{{ tag.name }}</i>
+  </a>
+  {% endfor %}
+</p>
+{% endif %}
+
+{# Action buttons form #}
+{# Using single form with multiple buttons for cleaner HTML #}
+<form>
+  {# Cancel button - returns to user profile #}
+  {# Using GET method as this is navigation #}
+  <button class="btn btn-outline-primary"
+          formmethod="GET"
+          formaction="/users/{{ post.user_id }}">Cancel
+  </button>
+  
+  {# Edit button - navigates to edit form #}
+  {# Using GET method as this is navigation #}
+  <button class="btn btn-primary"
+          formmethod="GET"
+          formaction="/posts/{{ post.id }}/edit">Edit
+  </button>
+  
+  {# Delete button - triggers post deletion #}
+  {# Using POST method as this modifies data #}
+  {# Danger styling indicates destructive action #}
+  <button class="btn btn-danger"
+          formmethod="POST"
+          formaction="/posts/{{ post.id }}/delete">Delete
+  </button>
+</form>
+
+{% endblock %}

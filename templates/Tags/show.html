@@ -1,0 +1,35 @@
+{# Inherit from base template for consistent site layout #}
+{% extends 'base.html' %}
+
+{# Set page title dynamically using tag name #}
+{% block title %}{{ tag.name }}{% endblock %}
+
+{% block content %}
+{# Main content section #}
+
+{# Display tag name as main heading #}
+<h1>{{ tag.name }}</h1>
+
+{# List all posts associated with this tag #}
+<ul>
+  {% for post in tag.posts %}
+  {# Each post links to its detail view using post.id #}
+  <li><a href="/posts/{{ post.id }}">{{ post.title }}</a></li>
+  {% endfor %}
+</ul>
+
+{# Single form containing both edit and delete actions #}
+{# Using HTML5 form attributes instead of separate forms for cleaner markup #}
+<form>
+  {# Edit button - uses GET for safe, idempotent operation #}
+  <button formmethod="GET"
+          formaction="/tags/{{ tag.id }}/edit"
+          class="btn btn-primary">Edit
+  </button>
+  {# Delete button - uses POST since it modifies data #}
+  <button formmethod="POST"
+          formaction="/tags/{{ tag.id }}/delete"
+          class="btn btn-danger">Delete
+  </button>
+</form>
+{% endblock %}

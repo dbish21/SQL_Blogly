@@ -1,0 +1,70 @@
+{# Extend base template for consistent site layout #}
+{% extends 'base.html' %}
+
+{# Clear page title for post creation #}
+{% block title %}Add Post{% endblock %}
+
+{% block content %}
+
+{# Heading includes user's name for context #}
+<h1>Add Post for {{ user.full_name }}</h1>
+
+{# Post creation form #}
+{# Method defaults to current URL (/users/<user_id>/posts/new) #}
+<form method="POST">
+
+  {# Title input group #}
+  {# Using Bootstrap grid system for responsive layout #}
+  <div class="form-group row">
+    <label for="title" class="col-sm-2 col-form-label">Title</label>
+    <div class="col-sm-10">
+      {# Simple text input for post title #}
+      <input class="form-control" id="title" name="title">
+    </div>
+  </div>
+
+  {# Content input group #}
+  {# Using textarea for multi-line content #}
+  <div class="form-group row">
+    <label for="content" class="col-sm-2 col-form-label">Content</label>
+    <div class="col-sm-10">
+      {# Textarea allows for longer, formatted content #}
+      <textarea class="form-control" id="content" name="content"></textarea>
+    </div>
+  </div>
+
+  {# Tags selection group #}
+  {# Using checkboxes for multiple tag selection #}
+  <div class="form-check">
+    {% for tag in tags %}
+    <div>
+      {# Checkbox for each available tag #}
+      {# - name="tags" allows for multiple selections #}
+      {# - value contains tag.id for backend processing #}
+      {# - unique ID for each checkbox matches label #}
+      <input class="form-check-input"
+             type="checkbox"
+             value="{{ tag.id }}"
+             id="tag_{{ tag.id }}"
+             name="tags">
+      <label class="form-check-label" for="tag_{{ tag.id }}">
+        {{ tag.name }}
+      </label>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# Form actions group #}
+  {# Using Bootstrap utilities for alignment #}
+  <div class="form-group row">
+    <div class="ml-auto mr-3">
+      {# Cancel returns to user's profile #}
+      <a href="/users/{{ user.id }}" class="btn btn-info">Cancel</a>
+      {# Submit button with success styling #}
+      <button type="submit" class="btn btn-success">Add</button>
+    </div>
+  </div>
+
+</form>
+
+{% endblock %}

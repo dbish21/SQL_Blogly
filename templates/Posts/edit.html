@@ -1,0 +1,78 @@
+{# Extend base template for consistent site layout #}
+{% extends 'base.html' %}
+
+{# Clear page title for post editing #}
+{% block title %}Edit Post{% endblock %}
+
+{% block content %}
+
+<h1>Edit Post</h1>
+
+{# Form for editing existing post #}
+{# Action URL includes post.id for proper routing #}
+<form method="POST" action="/posts/{{ post.id }}/edit">
+
+  {# Title input group #}
+  {# Using Bootstrap grid system for responsive layout #}
+  <div class="form-group row">
+    <label for="title" class="col-sm-2 col-form-label">Title</label>
+    <div class="col-sm-10">
+      {# Text input pre-populated with current post title #}
+      <input class="form-control" id="title" name="title" value="{{ post.title }}">
+    </div>
+  </div>
+
+  {# Content input group #}
+  {# Using textarea for multi-line content #}
+  <div class="form-group row">
+    <label for="content" class="col-sm-2 col-form-label">Post Content</label>
+    <div class="col-sm-10">
+      {# Textarea pre-populated with current post content #}
+      {# Content goes between tags rather than in value attribute #}
+      <textarea class="form-control"
+                id="content"
+                name="content">{{ post.content }}</textarea>
+    </div>
+  </div>
+
+  {# Tags selection group #}
+  {# Using checkboxes for multiple tag selection #}
+  <div class="form-check">
+    {% for tag in tags %}
+    <div>
+      {# Checkbox for each tag #}
+      {# - checked if tag is currently associated with post #}
+      {# - name="tags" allows for multiple selections #}
+      {# - unique ID for each checkbox matches label #}
+      <input class="form-check-input"
+             type="checkbox"
+             value="{{ tag.id }}"
+             id="tag_{{ tag.id }}"
+             {% if tag in post.tags %}checked{% endif %}
+             name="tags">
+      <label class="form-check-label" for="tag_{{ tag.id }}">
+        {{ tag.name }}
+      </label>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# Form actions group #}
+  {# Using Bootstrap utilities for alignment #}
+  <div class="form-group row">
+    <div class="ml-auto mr-3">
+      {# Cancel returns to user's profile #}
+      {# Using outline style for secondary action #}
+      <a href="/users/{{ post.user_id }}" class="btn btn-outline-info">
+        Cancel
+      </a>
+      {# Submit button with success styling #}
+      <button type="submit" class="btn btn-success">
+        Edit
+      </button>
+    </div>
+  </div>
+
+</form>
+
+{% endblock %}

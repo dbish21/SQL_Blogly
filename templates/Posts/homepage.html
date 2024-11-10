@@ -1,0 +1,47 @@
+{# Extend base template for consistent site layout #}
+{% extends 'base.html' %}
+
+{# Simple site title for homepage #}
+{% block title %}Blogly{% endblock %}
+
+{% block content %}
+
+{# Main heading indicates recent posts section #}
+<h1>Blogly Recent Posts</h1>
+
+{# Loop through posts (limited to most recent in route) #}
+{% for post in posts %}
+{# Post title as heading with link to full post #}
+{# Using mt-4 for consistent spacing between posts #}
+<h2 class="mt-4">
+  <a href="/posts/{{ post.id }}">{{ post.title }}</a>
+</h2>
+
+{# Post content preview #}
+{# Displayed as-is without truncation #}
+<p>{{ post.content }}</p>
+
+{# Post metadata #}
+{# Using small tag for secondary information #}
+<p>
+  <small>By {{ post.user.full_name }} on {{ post.friendly_date }}</small>
+</p>
+
+{# Tags section - only shown if post has tags #}
+{% if post.tags %}
+<p>
+  <b>Tags:</b>
+  {# Loop through tags, displaying each as a clickable badge #}
+  {% for tag in post.tags %}
+  <a href="/tags/{{ tag.id }}">
+    {# Using Bootstrap badge styling for tag visual #}
+    {# Italic tag names to distinguish from regular text #}
+    <i class="badge badge-primary">{{ tag.name }}</i>
+  </a>
+  {% endfor %}
+</p>
+{% endif %}
+
+{% endfor %}
+
+{% endblock %}}

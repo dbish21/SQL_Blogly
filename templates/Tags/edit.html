@@ -1,0 +1,73 @@
+{# Extend base template for consistent site layout #}
+{% extends 'base.html' %}
+
+{# Simple title for the edit page #}
+{% block title %}Edit Tag{% endblock %}
+
+{% block content %}
+
+<h1>Edit a tag</h1>
+
+{# Main form using POST method for data modification #}
+{# Action URL includes tag.id for proper routing #}
+<form method="POST" action="/tags/{{ tag.id }}/edit">
+
+  {# Tag name input group #}
+  {# Using Bootstrap grid system for responsive layout #}
+  <div class="form-group row">
+    <label for="name" class="col-sm-2 col-form-label d-flex align-items-center">
+      Name
+    </label>
+    <div class="col-sm-10">
+      {# Text input pre-populated with current tag name #}
+      {# Using value attribute instead of content for proper form behavior #}
+      <input type="text" 
+             class="form-control" 
+             id="name" 
+             name="name" 
+             placeholder="Enter a name for the tag"
+             value="{{ tag.name }}">
+    </div>
+  </div>
+
+  {# Posts selection group #}
+  {# Using checkboxes to allow multiple selections #}
+  <div class="form-group row form-check">
+    {% for post in posts %}
+    <div>
+      {# Checkbox for each post #}
+      {# - value is post.id for backend processing #}
+      {# - name="posts" allows for multiple selections in form data #}
+      {# - checked if post is currently associated with tag #}
+      <input
+              class="form-input"
+              type="checkbox"
+              value="{{ post.id }}"
+              id="post_{{ post.id }}"
+              name="posts"
+              {% if post in tag.posts %}
+              checked
+              {% endif %}
+      >
+      {# Label shows post title and is linked to checkbox via for attribute #}
+      <label class="form-check-label" for="post_{{ post.id }}">
+        {{ post.title }}
+      </label>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# Form actions group #}
+  {# Using Bootstrap utilities for positioning and spacing #}
+  <div class="mt-3 form-group row">
+    <div class="ml-auto mr-3">
+      {# Cancel button as link to preserve browser history #}
+      <a href="/tags" class="btn btn-info">Cancel</a>
+      {# Submit button styled as success to indicate positive action #}
+      <button type="submit" class="btn btn-success">Edit</button>
+    </div>
+  </div>
+
+</form>
+
+{% endblock %}
